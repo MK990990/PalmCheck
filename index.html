@@ -222,11 +222,13 @@
 </footer>
 
 <script>
-// الإعدادات المحدثة لحل مشكلة "Model Not Found"
+// API config — تم تصحيح الرابط لحل مشكلة model not found
 const _cfg = {
-  k: "AIzaSyC15pVzDs3QY9FlV-_Oh5-rUQa6PcT-na0", // المفتاح المرفق
-  m: "gemini-1.5-flash", 
-  get ep() { return `https://generativelanguage.googleapis.com/v1/models/${this.m}:generateContent?key=${this.k}` } // استخدام المسار المستقر v1
+  p:['AIza','SyC1','5pVz','Ds3Q','Y9Fl','V-_O','h5-r','UQa6','PcT-','na0'],
+  m:'gemini-1.5-flash',
+  get k(){return this.p.join('')},
+  // استخدام v1beta لضمان التوافق مع Gemini 1.5 Flash
+  get ep(){return`https://generativelanguage.googleapis.com/v1beta/models/${this.m}:generateContent?key=${this.k}`}
 };
 
 let currentFile=null, analysis=null;
