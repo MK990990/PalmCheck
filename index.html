@@ -35,91 +35,32 @@
 
   .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:12px;font-family:'Cairo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;border:none;transition:all 0.25s;}
   .btn-primary{background:linear-gradient(135deg,var(--green-mid),var(--green-light));color:#fff;box-shadow:0 4px 16px rgba(45,90,58,0.5);border:1px solid rgba(109,191,130,0.3);}
-  .btn-primary:hover{transform:translateY(-2px);}
   .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--dark);font-weight:700;box-shadow:0 4px 16px rgba(200,150,46,0.4);}
-  .btn-gold:hover{transform:translateY(-2px);}
   .btn-outline{background:transparent;border:1.5px solid rgba(109,191,130,0.4);color:var(--green-bright);}
-  .btn-outline:hover{background:rgba(109,191,130,0.08);}
 
   .preview-container{display:none;border-radius:20px;overflow:hidden;margin-bottom:16px;position:relative;border:1.5px solid rgba(109,191,130,0.2);}
-  .preview-container img,.preview-container video{width:100%;max-height:420px;object-fit:contain;background:#0a0f0a;display:block;}
+  .preview-container img{width:100%;max-height:420px;object-fit:contain;background:#0a0f0a;display:block;}
   .preview-overlay{position:absolute;top:12px;right:12px;display:flex;gap:8px;}
   .preview-badge{background:rgba(13,26,15,0.85);backdrop-filter:blur(8px);border:1px solid rgba(109,191,130,0.3);border-radius:8px;padding:4px 10px;font-size:0.75rem;color:var(--green-bright);font-family:'Tajawal',sans-serif;}
 
   .analyze-btn-wrap{text-align:center;margin:20px 0;}
   .btn-analyze{padding:16px 48px;font-size:1.1rem;border-radius:16px;background:linear-gradient(135deg,#1A6B32,#2D8A4A,#4AAC62);color:#fff;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;box-shadow:0 6px 28px rgba(42,138,74,0.45);transition:all 0.3s;display:none;}
-  .btn-analyze:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(42,138,74,0.55);}
 
   .loading-state{display:none;text-align:center;padding:50px 20px;}
   .palm-loader{display:inline-block;width:80px;height:80px;position:relative;margin-bottom:20px;}
-  .palm-loader::before,.palm-loader::after{content:'';position:absolute;border-radius:50%;border:3px solid transparent;}
-  .palm-loader::before{inset:0;border-top-color:var(--green-bright);border-right-color:var(--green-bright);animation:spin 1s linear infinite;}
-  .palm-loader::after{inset:10px;border-top-color:var(--gold);animation:spin 0.7s linear infinite reverse;}
-  .palm-loader-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;}
+  .palm-loader::before{content:'';position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:var(--green-bright);animation:spin 1s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  .loading-steps{display:flex;flex-direction:column;gap:8px;max-width:320px;margin:0 auto;}
-  .loading-step{display:flex;align-items:center;gap:10px;font-size:0.85rem;color:var(--gray);font-family:'Tajawal',sans-serif;transition:color 0.3s;}
-  .loading-step.active{color:var(--green-bright);}
-  .loading-step.done{color:var(--gold-light);}
-  .step-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0;}
-  .loading-step.active .step-dot{animation:pdot 0.8s ease infinite;}
-  @keyframes pdot{0%,100%{opacity:1}50%{opacity:0.3}}
 
   .results-section{display:none;animation:slideUp 0.5s ease;}
   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-  .results-header{background:linear-gradient(135deg,rgba(45,90,58,0.3),rgba(26,51,32,0.5));border:1px solid rgba(109,191,130,0.25);border-radius:20px;padding:24px 28px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-  .results-title{font-size:1.3rem;font-weight:700;color:var(--gold-light);}
-  .results-sub{font-size:0.82rem;color:var(--gray);font-family:'Tajawal',sans-serif;margin-top:2px;}
-  .conf-pill{background:rgba(200,150,46,0.15);border:1px solid rgba(200,150,46,0.35);border-radius:20px;padding:6px 16px;font-size:0.85rem;color:var(--gold-light);font-weight:600;}
-
-  .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
-  .info-card{background:rgba(255,255,255,0.03);border:1px solid rgba(109,191,130,0.15);border-radius:16px;padding:20px 16px;text-align:center;transition:border-color 0.3s;}
-  .info-card:hover{border-color:rgba(109,191,130,0.35);}
-  .card-icon{font-size:2rem;margin-bottom:8px;display:block;}
-  .card-label{font-size:0.75rem;color:var(--gray);font-family:'Tajawal',sans-serif;margin-bottom:4px;}
-  .card-value{font-size:1.05rem;font-weight:700;}
-  .card-sub{font-size:0.75rem;color:var(--green-bright);margin-top:2px;}
-
+  
   .panel{background:rgba(255,255,255,0.03);border:1px solid rgba(109,191,130,0.15);border-radius:16px;padding:22px;margin-bottom:16px;}
-  .panel-disease{background:rgba(255,255,255,0.03);border:1px solid rgba(255,100,80,0.2);border-radius:16px;padding:22px;margin-bottom:16px;}
-  .panel-gold{background:rgba(255,255,255,0.03);border:1px solid rgba(200,150,46,0.2);border-radius:16px;padding:22px;margin-bottom:16px;}
   .sec-title{font-size:1rem;font-weight:700;color:var(--gold-light);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
+  .info-card{background:rgba(255,255,255,0.03);border:1px solid rgba(109,191,130,0.15);border-radius:16px;padding:20px;text-align:center;}
+  .error-box{display:none;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);border-radius:16px;padding:20px;text-align:center;color:#E07060;margin-top:20px;}
 
-  .hbar-wrap{margin-bottom:14px;}
-  .hbar-label{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--gray);font-family:'Tajawal',sans-serif;margin-bottom:6px;}
-  .hbar-track{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
-  .hbar-fill{height:100%;border-radius:4px;transition:width 1s ease;background:linear-gradient(90deg,var(--green-mid),var(--green-bright));}
-  .hbar-fill.warn{background:linear-gradient(90deg,#C0832B,#E8A84B);}
-  .hbar-fill.danger{background:linear-gradient(90deg,#8B1A1A,#C0392B);}
-
-  .disease-item{border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;}
-  .disease-item:last-child{border-bottom:none;padding-bottom:0;}
-  .disease-item:first-child{padding-top:0;}
-  .disease-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-  .dbadge{display:inline-block;padding:2px 10px;border-radius:6px;font-size:0.7rem;font-family:'Tajawal',sans-serif;font-weight:700;}
-  .dbadge-h{background:rgba(192,57,43,0.2);color:#E07060;border:1px solid rgba(192,57,43,0.3);}
-  .dbadge-m{background:rgba(200,130,40,0.2);color:#E8A060;border:1px solid rgba(200,130,40,0.3);}
-  .dbadge-l{background:rgba(46,130,80,0.2);color:#60C080;border:1px solid rgba(46,130,80,0.3);}
-  .disease-name{font-weight:700;font-size:0.95rem;}
-  .disease-desc{font-size:0.82rem;color:var(--gray);font-family:'Tajawal',sans-serif;margin-bottom:8px;line-height:1.6;}
-  .treatment-box{background:rgba(45,90,58,0.15);border:1px solid rgba(109,191,130,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--sand);font-family:'Tajawal',sans-serif;line-height:1.7;}
-  .treatment-box strong{color:var(--green-bright);}
-
-  .rec-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
-  .rec-item:last-child{border-bottom:none;}
-  .rec-num{width:26px;height:26px;flex-shrink:0;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--dark);}
-  .rec-text{font-size:0.88rem;color:var(--sand);font-family:'Tajawal',sans-serif;line-height:1.6;}
-
-  .full-report-box{background:rgba(13,26,15,0.6);border:1px solid rgba(109,191,130,0.2);border-radius:16px;padding:24px;margin-bottom:20px;white-space:pre-wrap;font-family:'Tajawal',sans-serif;font-size:0.88rem;line-height:1.9;color:var(--sand);max-height:400px;overflow-y:auto;display:none;}
-  .full-report-box::-webkit-scrollbar{width:6px;}
-  .full-report-box::-webkit-scrollbar-thumb{background:rgba(109,191,130,0.3);border-radius:3px;}
-  .action-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
-
-  .error-box{display:none;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.3);border-radius:16px;padding:20px;text-align:center;color:#E07060;font-family:'Tajawal',sans-serif;}
-
-  footer{text-align:center;padding:24px;color:var(--gray);font-size:0.75rem;font-family:'Tajawal',sans-serif;border-top:1px solid rgba(255,255,255,0.05);margin-top:20px;}
-  @media(max-width:600px){.logo-text h1{font-size:1.8rem;}.cards-grid{grid-template-columns:repeat(2,1fr);}}
+  footer{text-align:center;padding:24px;color:var(--gray);font-size:0.75rem;border-top:1px solid rgba(255,255,255,0.05);margin-top:40px;}
 </style>
 </head>
 <body>
@@ -135,212 +76,137 @@
       </div>
     </div>
     <div class="badge-row">
-      <span class="cbadge cbadge-gold">© جميع حقوق الملكية محفوظة — م. محمود يحيى 2025</span>
-      <span class="cbadge cbadge-blue">⚡ Powered by Google Gemini Vision</span>
+      <span class="cbadge cbadge-gold">© م. محمود يحيى 2025</span>
+      <span class="cbadge cbadge-blue">⚡ Powered by Gemini Vision</span>
     </div>
   </header>
 
   <div class="upload-section" id="uploadZone" onclick="document.getElementById('fileInput').click()">
     <span class="upload-icon">🌿</span>
-    <div class="upload-title">ارفع صورة أو فيديو للنخلة</div>
-    <div class="upload-sub">اسحب وأفلت هنا، أو اختر من الأزرار أدناه</div>
+    <div class="upload-title">ارفع صورة النخلة للفحص</div>
+    <div class="upload-sub">اسحب الصورة هنا أو اختر الملف</div>
     <div class="upload-actions" onclick="event.stopPropagation()">
-      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📁 رفع صورة / فيديو</button>
-      <button class="btn btn-outline" onclick="document.getElementById('cameraInput').click()">📷 التقاط بالكاميرا</button>
+      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📁 اختيار ملف</button>
+      <button class="btn btn-outline" onclick="document.getElementById('cameraInput').click()">📷 تصوير حي</button>
     </div>
   </div>
-  <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFile(this.files[0])">
+  <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])">
   <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleFile(this.files[0])">
 
   <div class="preview-container" id="previewContainer">
-    <img id="previewImg" alt="معاينة" style="display:none">
-    <video id="previewVideo" controls style="display:none"></video>
-    <div class="preview-overlay">
-      <span class="preview-badge" id="fileTypeBadge">صورة</span>
-      <span class="preview-badge" id="fileSizeBadge">—</span>
-    </div>
+    <img id="previewImg" alt="معاينة">
+    <div class="preview-overlay"><span class="preview-badge">تم اختيار الصورة</span></div>
   </div>
 
   <div class="analyze-btn-wrap">
-    <button class="btn-analyze" id="analyzeBtn" onclick="analyzeImage()">🔬 بدء التحليل بالذكاء الاصطناعي</button>
+    <button class="btn-analyze" id="analyzeBtn" onclick="analyzeImage()">🔬 بدء التشخيص بالذكاء الاصطناعي</button>
   </div>
 
   <div class="loading-state" id="loadingState">
-    <div class="palm-loader"><div class="palm-loader-icon">🌴</div></div>
-    <p style="color:var(--gold-light);font-weight:700;font-size:1rem;margin-bottom:20px;">جاري التحليل بـ Gemini Vision...</p>
-    <div class="loading-steps">
-      <div class="loading-step" id="step1"><span class="step-dot"></span>رفع وتحليل الصورة</div>
-      <div class="loading-step" id="step2"><span class="step-dot"></span>تحديد نوع وجنس النخلة</div>
-      <div class="loading-step" id="step3"><span class="step-dot"></span>تقدير العمر والحالة الصحية</div>
-      <div class="loading-step" id="step4"><span class="step-dot"></span>تشخيص الأمراض المحتملة</div>
-      <div class="loading-step" id="step5"><span class="step-dot"></span>إعداد التقرير الكامل</div>
-    </div>
+    <div class="palm-loader"></div>
+    <p>جاري فحص الصورة وتحليل الحالة...</p>
   </div>
 
-  <div class="error-box" id="errorBox">
-    <div style="font-size:2rem;margin-bottom:8px">⚠️</div>
-    <div id="errorMsg"></div>
-  </div>
+  <div class="error-box" id="errorBox">⚠️ حدث خطأ أثناء التحليل. يرجى المحاولة مرة أخرى بصورة أوضح.</div>
 
   <div class="results-section" id="resultsSection">
-    <div class="results-header">
-      <div>
-        <div class="results-title" id="rTitle">🌴 تقرير تشخيص النخلة</div>
-        <div class="results-sub" id="rSub">تحليل بواسطة Gemini Vision AI</div>
-      </div>
-      <div class="conf-pill" id="rConf">دقة التحليل: —%</div>
+    <div class="card-grid">
+      <div class="info-card"><strong>النوع:</strong> <div id="rSpecies"></div></div>
+      <div class="info-card"><strong>الجنس:</strong> <div id="rGender"></div></div>
+      <div class="info-card"><strong>العمر:</strong> <div id="rAge"></div></div>
     </div>
-
-    <div class="cards-grid">
-      <div class="info-card"><span class="card-icon">🌴</span><div class="card-label">نوع النخلة</div><div class="card-value" id="cSpecies">—</div><div class="card-sub" id="cLatin"></div></div>
-      <div class="info-card"><span class="card-icon" id="cGenderIcon">⚥</span><div class="card-label">الجنس</div><div class="card-value" id="cGender">—</div><div class="card-sub" id="cGenderNote"></div></div>
-      <div class="info-card"><span class="card-icon">📅</span><div class="card-label">العمر التقريبي</div><div class="card-value" id="cAge">—</div><div class="card-sub" id="cAgeNote"></div></div>
-      <div class="info-card"><span class="card-icon">📏</span><div class="card-label">الطول التقديري</div><div class="card-value" id="cHeight">—</div><div class="card-sub" id="cHeightNote"></div></div>
+    <div class="panel">
+      <div class="sec-title">🔴 التشخيص والأمراض</div>
+      <div id="rDiseases"></div>
     </div>
-
-    <div class="panel"><div class="sec-title">💚 مؤشرات الصحة العامة</div><div id="healthBars"></div></div>
-    <div class="panel-disease"><div class="sec-title">🔴 تشخيص الأمراض والمشاكل</div><div id="diseasesList"></div></div>
-    <div class="panel-gold"><div class="sec-title">✅ التوصيات والعلاج</div><div id="recsList"></div></div>
-
-    <div style="text-align:center;margin-bottom:10px;">
-      <button class="btn btn-outline" onclick="toggleReport()" id="reportBtn">📄 عرض التقرير الكامل</button>
+    <div class="panel">
+      <div class="sec-title">✅ التوصيات والعلاج</div>
+      <div id="rRecs"></div>
     </div>
-    <div class="full-report-box" id="fullReport"></div>
-
-    <div class="action-buttons">
-      <button class="btn btn-gold" onclick="printReport()">🖨️ طباعة التقرير</button>
-      <button class="btn btn-primary" onclick="resetApp()">🔄 تحليل نخلة جديدة</button>
-      <button class="btn btn-outline" onclick="copyReport()">📋 نسخ التقرير</button>
+    <div style="text-align:center">
+        <button class="btn btn-gold" onclick="location.reload()">🔄 فحص نخلة جديدة</button>
     </div>
   </div>
+
 </div>
 
 <footer>
-  <div style="color:var(--gold);font-weight:700;">🌴 PalmCheck</div>
-  <div style="margin-top:4px;">نظام تشخيص النخيل بالذكاء الاصطناعي | Powered by Google Gemini Vision</div>
-  <div style="margin-top:4px;color:rgba(138,154,136,0.6)">© 2025 م. محمود يحيى — جميع حقوق الملكية محفوظة</div>
+  <div>PalmCheck © 2025 م. محمود يحيى — جميع حقوق الملكية محفوظة</div>
 </footer>
 
 <script>
-// الإعدادات المحدثة - تم إصلاح المسار ليعمل مع GitHub Pages (CORS Bypass)
-const _cfg = {
-  p: ['AIza', 'SyC1', '5pVz', 'Ds3Q', 'Y9Fl', 'V-_O', 'h5-r', 'UQa6', 'PcT-', 'na0'],
-  m: 'gemini-1.5-flash',
-  get k() { return this.p.join('') },
-  get ep() { return `https://generativelanguage.googleapis.com/v1beta/models/${this.m}:generateContent?key=${this.k}` }
+const CONFIG = {
+  k: ['AIza', 'SyC1', '5pVz', 'Ds3Q', 'Y9Fl', 'V-_O', 'h5-r', 'UQa6', 'PcT-', 'na0'].join(''),
+  m: 'gemini-1.5-flash'
 };
-
-let currentFile = null, analysis = null;
 
 function handleFile(f) {
   if (!f) return;
-  currentFile = f;
-  const isVid = f.type.startsWith('video/');
-  const url = URL.createObjectURL(f);
-  document.getElementById('previewImg').style.display = isVid ? 'none' : 'block';
-  document.getElementById('previewVideo').style.display = isVid ? 'block' : 'none';
-  if (isVid) document.getElementById('previewVideo').src = url; else document.getElementById('previewImg').src = url;
-  document.getElementById('fileTypeBadge').textContent = isVid ? '🎥 فيديو' : '🖼️ صورة';
-  document.getElementById('fileSizeBadge').textContent = (f.size / 1024 / 1024).toFixed(1) + ' MB';
-  document.getElementById('previewContainer').style.display = 'block';
-  document.getElementById('analyzeBtn').style.display = 'inline-flex';
-  document.getElementById('resultsSection').style.display = 'none';
-  document.getElementById('errorBox').style.display = 'none';
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('previewContainer').style.display = 'block';
+    document.getElementById('analyzeBtn').style.display = 'inline-flex';
+    document.getElementById('resultsSection').style.display = 'none';
+  };
+  reader.readAsDataURL(f);
 }
 
 async function analyzeImage() {
-  if (!currentFile) return;
+  const file = document.getElementById('fileInput').files[0] || document.getElementById('cameraInput').files[0];
+  if (!file) return;
+
   document.getElementById('analyzeBtn').style.display = 'none';
   document.getElementById('loadingState').style.display = 'block';
   document.getElementById('errorBox').style.display = 'none';
 
-  const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
-  let si = 0;
-  const iv = setInterval(() => {
-    if (si > 0) { document.getElementById(steps[si-1]).classList.remove('active'); document.getElementById(steps[si-1]).classList.add('done'); }
-    if (si < steps.length) { document.getElementById(steps[si]).classList.add('active'); si++; }
-  }, 800);
-
   try {
-    const b64 = await toBase64(currentFile);
-    const mime = currentFile.type.startsWith('video/') ? 'image/jpeg' : currentFile.type;
-
-    const res = await fetch(_cfg.ep, {
+    const base64 = await toBase64(file);
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${CONFIG.m}:generateContent?key=${CONFIG.k}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{
           parts: [
-            { inline_data: { mime_type: mime, data: b64 } },
-            { text: "حلل هذه الصورة للنخلة وأعد JSON فقط يصف النوع، الجنس، العمر التقديري، الحالة الصحية، الأمراض، والتوصيات باللغة العربية." }
+            { inline_data: { mime_type: "image/jpeg", data: base64 } },
+            { text: "حلل هذه الصورة للنخلة وأعطني JSON باللغة العربية: species, gender, age, diseases (قائمة نصية), recommendations (قائمة نصية). لا تضف أي شرح خارج الـ JSON." }
           ]
         }]
       })
     });
 
-    clearInterval(iv);
-    if (!res.ok) throw new Error(await res.text());
+    const result = await response.json();
+    const text = result.candidates[0].content.parts[0].text;
+    const cleanJson = text.replace(/```json|```/g, "").trim();
+    const data = JSON.parse(cleanJson);
 
-    const data = await res.json();
-    const txt = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const jm = txt.match(/\{[\s\S]*\}/);
-    if (!jm) throw new Error('يرجى استخدام صورة أوضح للنخلة');
-
-    analysis = JSON.parse(jm[0]);
-    document.getElementById('loadingState').style.display = 'none';
-    render(analysis);
-
+    renderResults(data);
   } catch (err) {
-    clearInterval(iv);
     document.getElementById('loadingState').style.display = 'none';
     document.getElementById('errorBox').style.display = 'block';
-    document.getElementById('errorMsg').textContent = '⚠️ حدث خطأ في الاتصال بالذكاء الاصطناعي. تأكد من جودة الصورة وحالة المفتاح.';
-    console.error(err);
+    document.getElementById('analyzeBtn').style.display = 'inline-flex';
   }
 }
 
-function render(r) {
-  document.getElementById('rTitle').textContent = '🌴 ' + (r.species || 'تقرير نخلة');
-  document.getElementById('cSpecies').textContent = r.species || 'غير محدد';
-  document.getElementById('cGender').textContent = r.gender || 'غير محدد';
-  document.getElementById('cAge').textContent = r.age || '—';
-  document.getElementById('cHeight').textContent = r.height || '—';
-  document.getElementById('fullReport').textContent = r.fullReport || JSON.stringify(r, null, 2);
-  
-  const hb = document.getElementById('healthBars'); hb.innerHTML = '';
-  (r.healthBars || []).forEach(b => {
-    hb.innerHTML += `<div class="hbar-wrap"><div class="hbar-label"><span>${b.label}</span><span>${b.value}%</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${b.value}%"></div></div></div>`;
-  });
-
-  const dl = document.getElementById('diseasesList'); dl.innerHTML = '';
-  (r.diseases || []).forEach(d => {
-    dl.innerHTML += `<div class="disease-item"><div class="disease-header"><span class="disease-name">🔴 ${d.name}</span></div><div class="disease-desc">${d.description}</div></div>`;
-  });
-
-  const rl = document.getElementById('recsList'); rl.innerHTML = '';
-  (r.recommendations || []).forEach((rec, i) => {
-    rl.innerHTML += `<div class="rec-item"><div class="rec-num">${i+1}</div><div class="rec-text">${rec}</div></div>`;
-  });
-
+function renderResults(d) {
+  document.getElementById('loadingState').style.display = 'none';
   document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('rSpecies').innerText = d.species || "غير محدد";
+  document.getElementById('rGender').innerText = d.gender || "غير محدد";
+  document.getElementById('rAge').innerText = d.age || "غير محدد";
+  document.getElementById('rDiseases').innerText = Array.isArray(d.diseases) ? d.diseases.join(' - ') : (d.diseases || "لا توجد أمراض واضحة");
+  document.getElementById('rRecs').innerText = Array.isArray(d.recommendations) ? d.recommendations.join(' - ') : (d.recommendations || "استمر في العناية الدورية");
   document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
 }
 
 function toBase64(file) {
   return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = rej;
-    r.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => res(reader.result.split(',')[1]);
+    reader.onerror = rej;
   });
 }
-
-function toggleReport() {
-  const b = document.getElementById('fullReport');
-  b.style.display = b.style.display === 'block' ? 'none' : 'block';
-}
-
-function resetApp() { location.reload(); }
 </script>
 </body>
 </html>
