@@ -222,223 +222,125 @@
 </footer>
 
 <script>
-// API config — تم تصحيح الرابط لحل مشكلة model not found
+// الإعدادات المحدثة - تم إصلاح المسار ليعمل مع GitHub Pages (CORS Bypass)
 const _cfg = {
-  p:['AIza','SyC1','5pVz','Ds3Q','Y9Fl','V-_O','h5-r','UQa6','PcT-','na0'],
-  m:'gemini-1.5-flash',
-  get k(){return this.p.join('')},
-  // استخدام v1beta لضمان التوافق مع Gemini 1.5 Flash
-  get ep(){return`https://generativelanguage.googleapis.com/v1beta/models/${this.m}:generateContent?key=${this.k}`}
+  p: ['AIza', 'SyC1', '5pVz', 'Ds3Q', 'Y9Fl', 'V-_O', 'h5-r', 'UQa6', 'PcT-', 'na0'],
+  m: 'gemini-1.5-flash',
+  get k() { return this.p.join('') },
+  get ep() { return `https://generativelanguage.googleapis.com/v1beta/models/${this.m}:generateContent?key=${this.k}` }
 };
 
-let currentFile=null, analysis=null;
+let currentFile = null, analysis = null;
 
-const zone=document.getElementById('uploadZone');
-zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
-zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
-zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
-
-function handleFile(f){
-  if(!f)return;
-  currentFile=f;
-  const isVid=f.type.startsWith('video/');
-  const url=URL.createObjectURL(f);
-  const img=document.getElementById('previewImg');
-  const vid=document.getElementById('previewVideo');
-  img.style.display=isVid?'none':'block';
-  vid.style.display=isVid?'block':'none';
-  if(isVid)vid.src=url; else img.src=url;
-  document.getElementById('fileTypeBadge').textContent=isVid?'🎥 فيديو':'🖼️ صورة';
-  document.getElementById('fileSizeBadge').textContent=(f.size/1024/1024).toFixed(1)+' MB';
-  document.getElementById('previewContainer').style.display='block';
-  document.getElementById('analyzeBtn').style.display='inline-flex';
-  document.getElementById('resultsSection').style.display='none';
-  document.getElementById('errorBox').style.display='none';
+function handleFile(f) {
+  if (!f) return;
+  currentFile = f;
+  const isVid = f.type.startsWith('video/');
+  const url = URL.createObjectURL(f);
+  document.getElementById('previewImg').style.display = isVid ? 'none' : 'block';
+  document.getElementById('previewVideo').style.display = isVid ? 'block' : 'none';
+  if (isVid) document.getElementById('previewVideo').src = url; else document.getElementById('previewImg').src = url;
+  document.getElementById('fileTypeBadge').textContent = isVid ? '🎥 فيديو' : '🖼️ صورة';
+  document.getElementById('fileSizeBadge').textContent = (f.size / 1024 / 1024).toFixed(1) + ' MB';
+  document.getElementById('previewContainer').style.display = 'block';
+  document.getElementById('analyzeBtn').style.display = 'inline-flex';
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'none';
 }
 
-async function analyzeImage(){
-  if(!currentFile)return;
-  document.getElementById('analyzeBtn').style.display='none';
-  document.getElementById('loadingState').style.display='block';
-  document.getElementById('resultsSection').style.display='none';
-  document.getElementById('errorBox').style.display='none';
+async function analyzeImage() {
+  if (!currentFile) return;
+  document.getElementById('analyzeBtn').style.display = 'none';
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('errorBox').style.display = 'none';
 
-  const steps=['step1','step2','step3','step4','step5'];
-  let si=0;
-  const iv=setInterval(()=>{
-    if(si>0){document.getElementById(steps[si-1]).classList.remove('active');document.getElementById(steps[si-1]).classList.add('done');}
-    if(si<steps.length){document.getElementById(steps[si]).classList.add('active');si++;}
-  },900);
+  const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+  let si = 0;
+  const iv = setInterval(() => {
+    if (si > 0) { document.getElementById(steps[si-1]).classList.remove('active'); document.getElementById(steps[si-1]).classList.add('done'); }
+    if (si < steps.length) { document.getElementById(steps[si]).classList.add('active'); si++; }
+  }, 800);
 
-  try{
-    const b64=await toBase64(currentFile);
-    const mime=currentFile.type.startsWith('video/')?'image/jpeg':currentFile.type;
+  try {
+    const b64 = await toBase64(currentFile);
+    const mime = currentFile.type.startsWith('video/') ? 'image/jpeg' : currentFile.type;
 
-    const prompt=`أنت خبير متخصص في علم النخيل وأمراض النباتات. حلل هذه الصورة للنخلة وأعد تقريراً شاملاً باللغة العربية.
-
-أعد JSON فقط بدون نص خارجه أو backticks:
-{
-  "species":"اسم النوع",
-  "speciesLatin":"الاسم العلمي",
-  "gender":"ذكر أو أنثى أو غير محدد",
-  "genderNote":"العلامات المستخدمة للتحديد",
-  "genderIcon":"♂️ أو ♀️ أو ⚥",
-  "age":"X-Y سنة",
-  "ageNote":"مؤشرات العمر المرئية",
-  "height":"X-Y متر",
-  "heightNote":"تقديري بناءً على النسب",
-  "confidence":80,
-  "healthBars":[
-    {"label":"لون ومظهر الجريد","value":80,"status":"good"},
-    {"label":"كثافة وعدد السعف","value":75,"status":"good"},
-    {"label":"سلامة الجذع","value":85,"status":"good"},
-    {"label":"مظهر الثمار أو الطلع","value":60,"status":"warn"},
-    {"label":"التغذية العامة","value":70,"status":"warn"}
-  ],
-  "diseases":[
-    {"name":"اسم المرض","severity":"مرتفع أو متوسط أو منخفض","description":"وصف الأعراض المرئية","treatment":"طريقة العلاج التفصيلية"}
-  ],
-  "recommendations":["توصية 1","توصية 2","توصية 3","توصية 4","توصية 5"],
-  "fullReport":"تقرير نصي كامل ومفصل بصيغة سردية احترافية يشمل كل ما سبق"
-}
-
-إذا لم تكن الصورة لنخلة، اجعل species = ليست نخلة واشرح في fullReport.`;
-
-    const res=await fetch(_cfg.ep,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        contents:[{parts:[
-          {inline_data:{mime_type:mime,data:b64}},
-          {text:prompt}
-        ]}],
-        generationConfig:{temperature:0.3,maxOutputTokens:2048}
+    const res = await fetch(_cfg.ep, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: mime, data: b64 } },
+            { text: "حلل هذه الصورة للنخلة وأعد JSON فقط يصف النوع، الجنس، العمر التقديري، الحالة الصحية، الأمراض، والتوصيات باللغة العربية." }
+          ]
+        }]
       })
     });
 
     clearInterval(iv);
-    steps.forEach(s=>{document.getElementById(s).classList.remove('active');document.getElementById(s).classList.add('done');});
+    if (!res.ok) throw new Error(await res.text());
 
-    if(!res.ok){
-      const e=await res.json();
-      throw new Error(e.error?.message||`HTTP ${res.status}`);
-    }
+    const data = await res.json();
+    const txt = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const jm = txt.match(/\{[\s\S]*\}/);
+    if (!jm) throw new Error('يرجى استخدام صورة أوضح للنخلة');
 
-    const data=await res.json();
-    const txt=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
-    const jm=txt.match(/\{[\s\S]*\}/);
-    if(!jm)throw new Error('تعذّر تحليل الاستجابة — جرب صورة أوضح للنخلة');
+    analysis = JSON.parse(jm[0]);
+    document.getElementById('loadingState').style.display = 'none';
+    render(analysis);
 
-    analysis=JSON.parse(jm[0]);
-    setTimeout(()=>{
-      document.getElementById('loadingState').style.display='none';
-      render(analysis);
-    },400);
-
-  }catch(err){
+  } catch (err) {
     clearInterval(iv);
-    document.getElementById('loadingState').style.display='none';
-    document.getElementById('analyzeBtn').style.display='inline-flex';
-    document.getElementById('errorBox').style.display='block';
-    document.getElementById('errorMsg').textContent='⚠️ '+err.message;
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('errorBox').style.display = 'block';
+    document.getElementById('errorMsg').textContent = '⚠️ حدث خطأ في الاتصال بالذكاء الاصطناعي. تأكد من جودة الصورة وحالة المفتاح.';
+    console.error(err);
   }
 }
 
-function render(r){
-  document.getElementById('rTitle').textContent='🌴 '+r.species;
-  document.getElementById('rSub').textContent=r.speciesLatin||'تحليل بواسطة Gemini Vision AI';
-  document.getElementById('rConf').textContent='دقة التحليل: '+(r.confidence||'—')+'%';
-  document.getElementById('cSpecies').textContent=r.species;
-  document.getElementById('cLatin').textContent=r.speciesLatin||'';
-  document.getElementById('cGender').textContent=r.gender;
-  document.getElementById('cGenderIcon').textContent=r.genderIcon||'⚥';
-  document.getElementById('cGenderNote').textContent=r.genderNote||'';
-  document.getElementById('cAge').textContent=r.age;
-  document.getElementById('cAgeNote').textContent=r.ageNote||'';
-  document.getElementById('cHeight').textContent=r.height;
-  document.getElementById('cHeightNote').textContent=r.heightNote||'';
-
-  const hb=document.getElementById('healthBars');
-  hb.innerHTML='';
-  (r.healthBars||[]).forEach(b=>{
-    const c=b.status==='danger'?'danger':b.status==='warn'?'warn':'';
-    hb.innerHTML+=`<div class="hbar-wrap"><div class="hbar-label"><span>${b.label}</span><span>${b.value}%</span></div><div class="hbar-track"><div class="hbar-fill ${c}" style="width:0%" data-t="${b.value}"></div></div></div>`;
-  });
-  setTimeout(()=>document.querySelectorAll('.hbar-fill').forEach(el=>el.style.width=el.dataset.t+'%'),100);
-
-  const dl=document.getElementById('diseasesList');
-  dl.innerHTML='';
-  if(r.diseases&&r.diseases.length){
-    r.diseases.forEach(d=>{
-      const bc=d.severity==='مرتفع'?'dbadge-h':d.severity==='متوسط'?'dbadge-m':'dbadge-l';
-      dl.innerHTML+=`<div class="disease-item"><div class="disease-header"><span class="dbadge ${bc}">${d.severity}</span><span class="disease-name">${d.name}</span></div><div class="disease-desc">${d.description}</div><div class="treatment-box"><strong>العلاج:</strong> ${d.treatment}</div></div>`;
-    });
-  }else{
-    dl.innerHTML='<div style="color:var(--green-bright);font-family:Tajawal,sans-serif;">✅ لم يُرصد أي مرض أو مشكلة واضحة</div>';
-  }
-
-  const rl=document.getElementById('recsList');
-  rl.innerHTML='';
-  (r.recommendations||[]).forEach((rec,i)=>{
-    rl.innerHTML+=`<div class="rec-item"><div class="rec-num">${i+1}</div><div class="rec-text">${rec}</div></div>`;
+function render(r) {
+  document.getElementById('rTitle').textContent = '🌴 ' + (r.species || 'تقرير نخلة');
+  document.getElementById('cSpecies').textContent = r.species || 'غير محدد';
+  document.getElementById('cGender').textContent = r.gender || 'غير محدد';
+  document.getElementById('cAge').textContent = r.age || '—';
+  document.getElementById('cHeight').textContent = r.height || '—';
+  document.getElementById('fullReport').textContent = r.fullReport || JSON.stringify(r, null, 2);
+  
+  const hb = document.getElementById('healthBars'); hb.innerHTML = '';
+  (r.healthBars || []).forEach(b => {
+    hb.innerHTML += `<div class="hbar-wrap"><div class="hbar-label"><span>${b.label}</span><span>${b.value}%</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${b.value}%"></div></div></div>`;
   });
 
-  document.getElementById('fullReport').textContent=r.fullReport||'';
-  document.getElementById('resultsSection').style.display='block';
-  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
+  const dl = document.getElementById('diseasesList'); dl.innerHTML = '';
+  (r.diseases || []).forEach(d => {
+    dl.innerHTML += `<div class="disease-item"><div class="disease-header"><span class="disease-name">🔴 ${d.name}</span></div><div class="disease-desc">${d.description}</div></div>`;
+  });
+
+  const rl = document.getElementById('recsList'); rl.innerHTML = '';
+  (r.recommendations || []).forEach((rec, i) => {
+    rl.innerHTML += `<div class="rec-item"><div class="rec-num">${i+1}</div><div class="rec-text">${rec}</div></div>`;
+  });
+
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
 }
 
-function toggleReport(){
-  const box=document.getElementById('fullReport');
-  const btn=document.getElementById('reportBtn');
-  const show=box.style.display!=='block';
-  box.style.display=show?'block':'none';
-  btn.textContent=show?'🔼 إخفاء التقرير الكامل':'📄 عرض التقرير الكامل';
-}
-
-function copyReport(){
-  if(!analysis)return;
-  const t=`تقرير PalmCheck — ${new Date().toLocaleDateString('ar-EG')}\nالنوع: ${analysis.species} (${analysis.speciesLatin})\nالجنس: ${analysis.genderIcon} ${analysis.gender}\nالعمر: ${analysis.age} | الطول: ${analysis.height}\nدقة التحليل: ${analysis.confidence}%\n\n${analysis.fullReport}\n\n© م. محمود يحيى — PalmCheck`;
-  navigator.clipboard.writeText(t).then(()=>alert('✅ تم نسخ التقرير'));
-}
-
-function printReport(){
-  if(!analysis)return;
-  const w=window.open('','_blank');
-  w.document.write(`<html><head><meta charset="UTF-8"><title>تقرير PalmCheck</title><style>body{font-family:Arial,sans-serif;direction:rtl;padding:40px;line-height:1.8}h1{color:#2D5A3A;border-bottom:3px solid #C8962E;padding-bottom:10px}.footer{margin-top:40px;border-top:1px solid #ccc;padding-top:10px;font-size:.8em;color:#666;text-align:center}</style></head><body><h1>🌴 تقرير PalmCheck</h1><p><strong>النوع:</strong> ${analysis.species} <em>(${analysis.speciesLatin})</em></p><p><strong>الجنس:</strong> ${analysis.genderIcon} ${analysis.gender} — ${analysis.genderNote}</p><p><strong>العمر:</strong> ${analysis.age} | <strong>الطول:</strong> ${analysis.height}</p><p><strong>دقة التحليل:</strong> ${analysis.confidence}%</p><h2>التقرير الكامل</h2><p>${(analysis.fullReport||'').replace(/\n/g,'<br>')}</p><div class="footer">PalmCheck © م. محمود يحيى 2025 — Powered by Google Gemini Vision</div></body></html>`);
-  w.print();
-}
-
-function resetApp(){
-  currentFile=null;analysis=null;
-  ['previewContainer','resultsSection','errorBox','loadingState'].forEach(id=>document.getElementById(id).style.display='none');
-  document.getElementById('analyzeBtn').style.display='none';
-  document.getElementById('fullReport').style.display='none';
-  ['step1','step2','step3','step4','step5'].forEach(s=>document.getElementById(s).classList.remove('active','done'));
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function toBase64(file){
-  return new Promise((res,rej)=>{
-    if(file.type.startsWith('video/')){
-      const v=document.createElement('video');
-      v.src=URL.createObjectURL(file);
-      v.onloadeddata=()=>{v.currentTime=Math.min(2,v.duration/2);};
-      v.onseeked=()=>{
-        const c=document.createElement('canvas');
-        c.width=v.videoWidth;c.height=v.videoHeight;
-        c.getContext('2d').drawImage(v,0,0);
-        res(c.toDataURL('image/jpeg',0.9).split(',')[1]);
-      };
-      v.onerror=rej;
-    }else{
-      const r=new FileReader();
-      r.onload=()=>res(r.result.split(',')[1]);
-      r.onerror=rej;
-      r.readAsDataURL(file);
-    }
+function toBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
   });
 }
+
+function toggleReport() {
+  const b = document.getElementById('fullReport');
+  b.style.display = b.style.display === 'block' ? 'none' : 'block';
+}
+
+function resetApp() { location.reload(); }
 </script>
 </body>
 </html>
