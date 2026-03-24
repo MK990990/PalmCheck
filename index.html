@@ -140,7 +140,6 @@
     </div>
   </header>
 
-  <!-- Upload -->
   <div class="upload-section" id="uploadZone" onclick="document.getElementById('fileInput').click()">
     <span class="upload-icon">🌿</span>
     <div class="upload-title">ارفع صورة أو فيديو للنخلة</div>
@@ -153,7 +152,6 @@
   <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFile(this.files[0])">
   <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleFile(this.files[0])">
 
-  <!-- Preview -->
   <div class="preview-container" id="previewContainer">
     <img id="previewImg" alt="معاينة" style="display:none">
     <video id="previewVideo" controls style="display:none"></video>
@@ -167,7 +165,6 @@
     <button class="btn-analyze" id="analyzeBtn" onclick="analyzeImage()">🔬 بدء التحليل بالذكاء الاصطناعي</button>
   </div>
 
-  <!-- Loading -->
   <div class="loading-state" id="loadingState">
     <div class="palm-loader"><div class="palm-loader-icon">🌴</div></div>
     <p style="color:var(--gold-light);font-weight:700;font-size:1rem;margin-bottom:20px;">جاري التحليل بـ Gemini Vision...</p>
@@ -180,13 +177,11 @@
     </div>
   </div>
 
-  <!-- Error -->
   <div class="error-box" id="errorBox">
     <div style="font-size:2rem;margin-bottom:8px">⚠️</div>
     <div id="errorMsg"></div>
   </div>
 
-  <!-- Results -->
   <div class="results-section" id="resultsSection">
     <div class="results-header">
       <div>
@@ -227,17 +222,15 @@
 </footer>
 
 <script>
-// API config — split to avoid plain-text exposure
+// الإعدادات المحدثة لحل مشكلة "Model Not Found"
 const _cfg = {
-  p:['AIza','SyC1','5pVz','Ds3Q','Y9Fl','V-_O','h5-r','UQa6','PcT-','na0'],
-  m:'gemini-1.5-flash',
-  get k(){return this.p.join('')},
-  get ep(){return`https://generativelanguage.googleapis.com/v1beta/models/${this.m}:generateContent?key=${this.k}`}
+  k: "AIzaSyC15pVzDs3QY9FlV-_Oh5-rUQa6PcT-na0", // المفتاح المرفق
+  m: "gemini-1.5-flash", 
+  get ep() { return `https://generativelanguage.googleapis.com/v1/models/${this.m}:generateContent?key=${this.k}` } // استخدام المسار المستقر v1
 };
 
 let currentFile=null, analysis=null;
 
-// Drag & drop
 const zone=document.getElementById('uploadZone');
 zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
 zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
